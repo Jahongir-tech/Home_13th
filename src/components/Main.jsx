@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import USER from "../assets/user.png";
 import { PatternFormat } from "react-number-format";
 import { countries } from "countries-list";
 
@@ -9,6 +8,7 @@ const Main = () => {
   const password = useRef(null);
   const firstName = useRef(null);
   const lastName = useRef(null);
+  const [email, setEmail] = useState("");
   const [country, setCountry] = useState(null);
   const [gender, setGender] = useState("Male");
   const birthdate = useRef(null);
@@ -33,6 +33,7 @@ const Main = () => {
         firstName: firstName.current.value,
         lastName: lastName.current.value,
         username,
+        email,
         password: password.current.value,
         country,
         gender,
@@ -49,6 +50,7 @@ const Main = () => {
         firstName: firstName.current.value,
         lastName: lastName.current.value,
         username,
+        email,
         password: password.current.value,
         country,
         gender,
@@ -61,6 +63,7 @@ const Main = () => {
     firstName.current.value = "";
     lastName.current.value = "";
     password.current.value = "";
+
     setCountry(COUNTRY_LIST[0]?.code || "");
     setGender("");
     birthdate.current.value = "";
@@ -78,6 +81,7 @@ const Main = () => {
     password.current.value = item.password;
     firstName.current.value = item.firstName;
     lastName.current.value = item.lastName;
+    setEmailse(item.email);
     setCountry(item.country);
     setEdit(item);
     setGender(item.gender);
@@ -91,34 +95,42 @@ const Main = () => {
   }));
 
   return (
-    <div onSubmit={handleSubmit} className="flex gap-5 font-roboto">
-      <form className="w-80 p-5 bg-indigo-100 h-screen rounded shadow-xl text-[16px] font-[500]">
+    <div onSubmit={handleSubmit} className="flex gap-5">
+      <form className="w-80 p-5 bg-white   h-screen rounded shadow-xl text-[16px]">
         <input
           ref={firstName}
           required
-          className="w-full h-10 px-3 mb-3 bg-indigo-200 rounded shadow-md"
+          className="w-full h-10 px-3 mb-3 rounded shadow-md"
           type="text"
           placeholder="First Name"
         />
         <input
           ref={lastName}
           required
-          className="w-full h-10 px-3 mb-3 bg-indigo-200 rounded shadow-md"
+          className="w-full h-10 px-3 mb-3 rounded shadow-md"
           type="text"
           placeholder="Last Name"
+        />
+        <input
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+          className="w-full h-10 px-3 mb-3  rounded shadow-md"
+          type="email"
+          placeholder="Email"
         />
         <input
           value={username}
           onChange={(event) => setUsername(event.target.value)}
           required
-          className="w-full h-10 px-3 mb-3 bg-indigo-200 rounded shadow-md"
+          className="w-full h-10 px-3 mb-3 border rounded shadow-md"
           type="text"
           placeholder="Username"
         />
         <input
           ref={password}
           required
-          className="w-full h-10 px-3 mb-3 bg-indigo-200 rounded shadow-md"
+          className="w-full h-10 px-3 mb-3 border rounded shadow-md"
           type="password"
           placeholder="Password"
           minLength={6}
@@ -127,7 +139,7 @@ const Main = () => {
           onChange={(event) => setCountry(event.target.value)}
           id="country-select"
           name="country"
-          className="w-full h-10 px-3 mb-3 bg-indigo-200 rounded-lg shadow-md cursor-pointer"
+          className="w-full h-10 px-3 mb-3 border rounded shadow-md cursor-pointer"
         >
           <option>Select your country</option>
           {COUNTRY_LIST.map((country) => (
@@ -136,8 +148,8 @@ const Main = () => {
             </option>
           ))}
         </select>
-        <div className="flex justify-evenly mb-3 bg-indigo-300 h-10 rounded-xl">
-          <label className="flex items-center cursor-pointer">
+        <div className="flex justify-evenly mb-3 border h-10 rounded shadow-md">
+          <label className="flex items-center cursor-pointer ">
             <input
               type="radio"
               name="gender"
@@ -164,35 +176,34 @@ const Main = () => {
           ref={birthdate}
           type="date"
           required
-          className="grid place-items-center w-full mb-3 bg-indigo-300 h-10 rounded-lg shadow-md cursor-pointer"
+          className="grid place-items-center w-full mb-3  h-10 rounded shadow-md cursor-pointer"
         />
         <PatternFormat
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
           required
-          className="w-full mb-3 bg-indigo-200 h-10 text-center rounded-lg shadow-md"
+          className="w-full mb-3 h-10 text-center rounded shadow-md"
           format="+998 (##) ### ## ##"
           allowEmptyFormatting
           mask="-"
         />
-        <button className="w-full h-10 px-3 mb-3 text-[18px] bg-indigo-500 rounded-lg shadow-md hover:bg-[azure] hover:text-indigo-400 duration-200 hover:border-[1px] hover:border-indigo-400">
+        <button className="w-full h-10 px-3 mb-3 text-[18px] rounded shadow-md hover:bg-black hover:text-white  hover:border-[1px] hover:border-black">
           Save
         </button>
       </form>
-      <div className="flex-1 flex gap-3 flex-wrap items-start content-start py-5 text-[18px] font-[500]">
+      <div className="flex-1 flex gap-3 flex-wrap items-start content-start py-5 text-[16px]">
         {data?.map((item) => (
           <div
             key={item.id}
-            className="w-72 p-3 shadow-lg bg-indigo-100 text-center flex flex-col gap-2 rounded-lg h-96"
+            className="w-72 p-3 shadow-lg bg-white text-center flex flex-col gap-2 rounded-lg h-96"
           >
-            <div className="w-20 h-20 bg-slate-300 rounded-full mx-auto overflow-hidden pt-2">
-              <img src={USER} alt="user.png" />
-            </div>
+
             <h3>
               {item.firstName} {item.lastName}
             </h3>
             <p>{item.birthdate}</p>
             <h3>{item.username}</h3>
+            <h3>{item.email}</h3>
             <p>{item.password.replace(/./g, "*")}</p>
             <p>{item.country}</p>
             <p>{item.gender}</p>
@@ -200,13 +211,13 @@ const Main = () => {
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => handleDelete(item.id)}
-                className="w-20 h-10 bg-indigo-400 p-1 rounded-lg shadow-md hover:bg-[azure] hover:text-indigo-400 duration-200 hover:border-[1px] hover:border-indigo-400"
+                className="w-20 h-10  p-1 rounded-lg shadow-md  hover:border-[1px] hover:border-black"
               >
                 Delete
               </button>
               <button
                 onClick={() => handleEdit(item)}
-                className="w-20 h-10 bg-indigo-400 p-1 rounded-lg shadow-md hover:bg-[azure] hover:text-indigo-400 duration-200 hover:border-[1px] hover:border-indigo-400"
+                className="w-20 h-10  p-1 rounded-lg shadow-md hover:border-[1px] hover:border-black"
               >
                 Edit
               </button>

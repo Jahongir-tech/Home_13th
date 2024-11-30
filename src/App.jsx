@@ -3,7 +3,7 @@ import Main from "./components/Main";
 
 function App() {
   return (
-    <div className="bg-slate-800">
+    <div className="bg-slate-100">
       <Main />
     </div>
   );
